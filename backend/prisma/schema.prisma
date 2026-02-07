@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ListRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
 model User {
   id           String   @id @default(uuid())
   name         String
@@ -15,7 +21,8 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  lists List[]
+  lists       List[]
+  memberships ListMember[]
 
   @@map("users")
 }
@@ -27,7 +34,22 @@ model List {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  members   ListMember[]
 
   @@map("lists")
+}
+
+model ListMember {
+  id        String   @id @default(uuid())
+  listId    String
+  userId    String
+  role      ListRole @default(VIEWER)
+  createdAt DateTime @default(now())
+
+  list List @relation(fields: [listId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([listId, userId])
+  @@map("list_members")
 }
