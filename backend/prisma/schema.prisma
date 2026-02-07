@@ -13,6 +13,11 @@ enum ListRole {
   VIEWER
 }
 
+enum ItemKind {
+  BOOK
+  OTHER
+}
+
 model User {
   id           String   @id @default(uuid())
   name         String
@@ -23,6 +28,7 @@ model User {
 
   lists       List[]
   memberships ListMember[]
+  items       ListItem[]
   invites     ListInvite[]
 
   @@map("users")
@@ -37,6 +43,7 @@ model List {
 
   createdBy User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
   members   ListMember[]
+  items     ListItem[]
   invites   ListInvite[]
 
   @@map("lists")
@@ -70,4 +77,22 @@ model ListInvite {
   createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
 
   @@map("list_invites")
+}
+
+model ListItem {
+  id          String    @id @default(uuid())
+  listId      String
+  createdById String
+  kind        ItemKind  @default(OTHER)
+  title       String
+  notes       String?
+  done        Boolean   @default(false)
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  list      List @relation(fields: [listId], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@map("list_items")
 }
