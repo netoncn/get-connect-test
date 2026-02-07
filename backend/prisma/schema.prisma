@@ -23,6 +23,7 @@ model User {
 
   lists       List[]
   memberships ListMember[]
+  invites     ListInvite[]
 
   @@map("users")
 }
@@ -36,6 +37,7 @@ model List {
 
   createdBy User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
   members   ListMember[]
+  invites   ListInvite[]
 
   @@map("lists")
 }
@@ -52,4 +54,20 @@ model ListMember {
 
   @@unique([listId, userId])
   @@map("list_members")
+}
+
+model ListInvite {
+  id         String    @id @default(uuid())
+  listId     String
+  email      String
+  token      String    @unique
+  role       ListRole  @default(VIEWER)
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  createdById String
+
+  list      List @relation(fields: [listId], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@map("list_invites")
 }
