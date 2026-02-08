@@ -86,7 +86,11 @@
     "inviteAccepted": "Convite aceito! Você foi adicionado à lista.",
     "addedToList": "Você foi adicionado à lista \"{{name}}\"",
     "viewList": "Ver Lista",
-    "emailPlaceholder": "membro@exemplo.com"
+    "emailPlaceholder": "membro@exemplo.com",
+    "userNotFound": "Usuário não encontrado. O email deve pertencer a uma conta cadastrada.",
+    "invitedBy": "Convidado por {{name}}",
+    "accept": "Aceitar",
+    "reject": "Recusar"
   },
   "theme": {
     "light": "Modo Claro",

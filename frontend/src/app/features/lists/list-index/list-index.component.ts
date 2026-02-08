@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ListsService } from '../../../core/services/lists.service';
 import { List } from '../../../core/models/list.model';
+import { PendingInvite } from '../../../core/models/invite.model';
 import { ListCardComponent } from '../components/list-card.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
@@ -17,6 +18,7 @@ export class ListIndexComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   readonly lists = signal<List[]>([]);
+  readonly pendingInvites = signal<PendingInvite[]>([]);
   readonly loading = signal(true);
   readonly showCreateModal = signal(false);
   readonly creating = signal(false);
@@ -27,6 +29,7 @@ export class ListIndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadLists();
+    this.loadPendingInvites();
   }
 
   loadLists(): void {
@@ -38,6 +41,33 @@ export class ListIndexComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
+      },
+    });
+  }
+
+  loadPendingInvites(): void {
+    this.listsService.getPendingInvites().subscribe({
+      next: (invites) => this.pendingInvites.set(invites),
+    });
+  }
+
+  onAcceptInvite(invite: PendingInvite): void {
+    this.listsService.acceptInviteById(invite.id).subscribe({
+      next: () => {
+        this.pendingInvites.update((invites) =>
+          invites.filter((i) => i.id !== invite.id)
+        );
+        this.loadLists();
+      },
+    });
+  }
+
+  onRejectInvite(invite: PendingInvite): void {
+    this.listsService.rejectInvite(invite.id).subscribe({
+      next: () => {
+        this.pendingInvites.update((invites) =>
+          invites.filter((i) => i.id !== invite.id)
+        );
       },
     });
   }

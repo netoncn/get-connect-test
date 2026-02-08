@@ -13,6 +13,7 @@ import {
   CreateInviteRequest,
   UpdateMemberRequest,
   AcceptInviteResponse,
+  PendingInvite,
 } from '../models/invite.model';
 
 @Injectable({
@@ -70,6 +71,18 @@ export class ListsService {
   }
 
   acceptInvite(token: string): Observable<AcceptInviteResponse> {
-    return this.api.post<AcceptInviteResponse>(`/invites/${token}/accept`);
+    return this.api.post<AcceptInviteResponse>(`/invites/${token}/accept-by-token`);
+  }
+
+  getPendingInvites(): Observable<PendingInvite[]> {
+    return this.api.get<PendingInvite[]>('/invites/pending');
+  }
+
+  acceptInviteById(inviteId: string): Observable<AcceptInviteResponse> {
+    return this.api.post<AcceptInviteResponse>(`/invites/${inviteId}/accept`);
+  }
+
+  rejectInvite(inviteId: string): Observable<void> {
+    return this.api.post<void>(`/invites/${inviteId}/reject`);
   }
 }

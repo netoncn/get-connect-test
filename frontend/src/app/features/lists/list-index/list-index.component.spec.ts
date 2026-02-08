@@ -35,6 +35,7 @@ describe('ListIndexComponent', () => {
     mockListsService = {
       getLists: vi.fn().mockReturnValue(of([])),
       createList: vi.fn().mockReturnValue(of(mockList)),
+      getPendingInvites: vi.fn().mockReturnValue(of([])),
     };
 
     await TestBed.configureTestingModule({

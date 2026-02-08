@@ -25,6 +25,7 @@ import {
   UpdateMemberDto,
   InviteResponseDto,
   AcceptInviteResponseDto,
+  PendingInviteDto,
 } from './dto';
 import { ListMemberResponseDto } from '../lists/dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -94,8 +95,45 @@ export class InvitesController {
     return this.invitesService.cancelInvite(listId, inviteId);
   }
 
-  @Post('invites/:token/accept')
-  @ApiOperation({ summary: 'Accept invite' })
+  @Get('invites/pending')
+  @ApiOperation({ summary: 'Get my pending invites' })
+  @ApiResponse({ status: 200, type: [PendingInviteDto] })
+  async getMyPendingInvites(
+    @CurrentUser() user: User,
+  ): Promise<PendingInviteDto[]> {
+    return this.invitesService.getMyPendingInvites(user.id);
+  }
+
+  @Post('invites/:inviteId/accept')
+  @ApiOperation({ summary: 'Accept invite by ID' })
+  @ApiParam({ name: 'inviteId', description: 'Invite ID' })
+  @ApiResponse({ status: 201, type: AcceptInviteResponseDto })
+  @ApiResponse({
+    status: 400,
+    description: 'Invite expired or already accepted',
+  })
+  @ApiResponse({ status: 403, description: 'Email mismatch' })
+  async acceptInviteById(
+    @Param('inviteId') inviteId: string,
+    @CurrentUser() user: User,
+  ): Promise<AcceptInviteResponseDto> {
+    return this.invitesService.acceptInviteById(inviteId, user.id);
+  }
+
+  @Post('invites/:inviteId/reject')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Reject invite' })
+  @ApiParam({ name: 'inviteId', description: 'Invite ID' })
+  @ApiResponse({ status: 204, description: 'Invite rejected' })
+  async rejectInvite(
+    @Param('inviteId') inviteId: string,
+    @CurrentUser() user: User,
+  ): Promise<void> {
+    return this.invitesService.rejectInvite(inviteId, user.id);
+  }
+
+  @Post('invites/:token/accept-by-token')
+  @ApiOperation({ summary: 'Accept invite by token (legacy)' })
   @ApiParam({ name: 'token', description: 'Invite token' })
   @ApiResponse({ status: 201, type: AcceptInviteResponseDto })
   @ApiResponse({

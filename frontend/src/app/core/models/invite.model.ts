@@ -24,3 +24,14 @@ export interface AcceptInviteResponse {
   listId: string;
   listName: string;
 }
+
+export interface PendingInvite {
+  id: string;
+  listId: string;
+  listName: string;
+  listItemCount: number;
+  listMemberCount: number;
+  role: ListRole;
+  invitedBy: string;
+  expiresAt: Date;
+}

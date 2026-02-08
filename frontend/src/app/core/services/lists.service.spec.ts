@@ -93,6 +93,6 @@ describe('ListsService', () => {
       expect(result).toEqual(mockResponse);
     });
 
-    expect(mockApi.post).toHaveBeenCalledWith('/invites/invite-token-xyz/accept');
+    expect(mockApi.post).toHaveBeenCalledWith('/invites/invite-token-xyz/accept-by-token');
   });
 });

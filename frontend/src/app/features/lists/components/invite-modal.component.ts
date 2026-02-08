@@ -19,6 +19,7 @@ export class InviteModalComponent {
 
   isOpen = input(false);
   loading = input(false);
+  error = input<string | null>(null);
 
   invite = output<InviteData>();
   close = output<void>();

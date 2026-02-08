@@ -129,10 +129,24 @@ describe('InvitesService', () => {
   });
 
   describe('createInvite', () => {
+    it('should throw NotFoundException when user does not exist', async () => {
+      const dto = { email: 'nobody@example.com' };
+
+      mockPrismaService.user.findUnique.mockResolvedValue(null);
+
+      await expect(
+        service.createInvite('list-1', 'user-1', dto),
+      ).rejects.toThrow(NotFoundException);
+      await expect(
+        service.createInvite('list-1', 'user-1', dto),
+      ).rejects.toThrow('User not found');
+    });
+
     it('should create invite with default VIEWER role', async () => {
       const dto = { email: 'jane@example.com' };
 
-      mockPrismaService.user.findUnique.mockResolvedValue(null);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockTargetUser);
+      mockPrismaService.listMember.findUnique.mockResolvedValue(null);
       mockPrismaService.listInvite.findFirst.mockResolvedValue(null);
       mockPrismaService.listInvite.create.mockResolvedValue({
         id: 'invite-1',
@@ -189,7 +203,8 @@ describe('InvitesService', () => {
     it('should throw ConflictException when active invite exists', async () => {
       const dto = { email: 'jane@example.com' };
 
-      mockPrismaService.user.findUnique.mockResolvedValue(null);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockTargetUser);
+      mockPrismaService.listMember.findUnique.mockResolvedValue(null);
       mockPrismaService.listInvite.findFirst.mockResolvedValue({
         id: 'invite-existing',
         listId: 'list-1',
@@ -209,7 +224,8 @@ describe('InvitesService', () => {
     it('should lowercase the email', async () => {
       const dto = { email: 'Jane@EXAMPLE.com' };
 
-      mockPrismaService.user.findUnique.mockResolvedValue(null);
+      mockPrismaService.user.findUnique.mockResolvedValue(mockTargetUser);
+      mockPrismaService.listMember.findUnique.mockResolvedValue(null);
       mockPrismaService.listInvite.findFirst.mockResolvedValue(null);
       mockPrismaService.listInvite.create.mockResolvedValue({
         id: 'invite-1',

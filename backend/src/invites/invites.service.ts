@@ -13,6 +13,7 @@ import {
   UpdateMemberDto,
   InviteResponseDto,
   AcceptInviteResponseDto,
+  PendingInviteDto,
 } from './dto';
 import { ListMemberResponseDto } from '../lists/dto';
 
@@ -55,19 +56,21 @@ export class InvitesService {
       where: { email },
     });
 
-    if (existingUser) {
-      const existingMembership = await this.prisma.listMember.findUnique({
-        where: {
-          listId_userId: {
-            listId,
-            userId: existingUser.id,
-          },
-        },
-      });
+    if (!existingUser) {
+      throw new NotFoundException('User not found');
+    }
 
-      if (existingMembership) {
-        throw new ConflictException('User is already a member of this list');
-      }
+    const existingMembership = await this.prisma.listMember.findUnique({
+      where: {
+        listId_userId: {
+          listId,
+          userId: existingUser.id,
+        },
+      },
+    });
+
+    if (existingMembership) {
+      throw new ConflictException('User is already a member of this list');
     }
 
     const existingInvite = await this.prisma.listInvite.findFirst({
@@ -264,6 +267,137 @@ export class InvitesService {
       acceptedAt: invite.acceptedAt ?? undefined,
       createdAt: invite.expiresAt,
     }));
+  }
+
+  async getMyPendingInvites(userId: string): Promise<PendingInviteDto[]> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const invites = await this.prisma.listInvite.findMany({
+      where: {
+        email: user.email.toLowerCase(),
+        acceptedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      include: {
+        list: {
+          include: {
+            _count: {
+              select: { items: true, members: true },
+            },
+          },
+        },
+        createdBy: true,
+      },
+      orderBy: { expiresAt: 'desc' },
+    });
+
+    return invites.map((invite) => ({
+      id: invite.id,
+      listId: invite.list.id,
+      listName: invite.list.name,
+      listItemCount: invite.list._count.items,
+      listMemberCount: invite.list._count.members,
+      role: invite.role,
+      invitedBy: invite.createdBy.name,
+      expiresAt: invite.expiresAt,
+    }));
+  }
+
+  async acceptInviteById(
+    inviteId: string,
+    userId: string,
+  ): Promise<AcceptInviteResponseDto> {
+    const invite = await this.prisma.listInvite.findUnique({
+      where: { id: inviteId },
+      include: { list: true },
+    });
+
+    if (!invite) {
+      throw new NotFoundException('Invite not found');
+    }
+
+    if (invite.acceptedAt) {
+      throw new BadRequestException('Invite has already been accepted');
+    }
+
+    if (invite.expiresAt < new Date()) {
+      throw new BadRequestException('Invite has expired');
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user || user.email.toLowerCase() !== invite.email.toLowerCase()) {
+      throw new ForbiddenException(
+        'This invite is for a different email address',
+      );
+    }
+
+    const existingMembership = await this.prisma.listMember.findUnique({
+      where: {
+        listId_userId: {
+          listId: invite.listId,
+          userId,
+        },
+      },
+    });
+
+    if (existingMembership) {
+      throw new ConflictException('You are already a member of this list');
+    }
+
+    await this.prisma.$transaction([
+      this.prisma.listMember.create({
+        data: {
+          listId: invite.listId,
+          userId,
+          role: invite.role,
+        },
+      }),
+      this.prisma.listInvite.update({
+        where: { id: invite.id },
+        data: { acceptedAt: new Date() },
+      }),
+    ]);
+
+    return {
+      message: 'Invite accepted successfully',
+      listId: invite.listId,
+      listName: invite.list.name,
+    };
+  }
+
+  async rejectInvite(inviteId: string, userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const invite = await this.prisma.listInvite.findFirst({
+      where: {
+        id: inviteId,
+        email: user.email.toLowerCase(),
+        acceptedAt: null,
+      },
+    });
+
+    if (!invite) {
+      throw new NotFoundException('Invite not found');
+    }
+
+    await this.prisma.listInvite.delete({
+      where: { id: inviteId },
+    });
   }
 
   async cancelInvite(listId: string, inviteId: string): Promise<void> {
