@@ -51,4 +51,17 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'invite/:token',
+    canActivate: [authGuard],
+    pathMatch: 'full',
+    loadComponent: () =>
+      import('./features/invite/accept-invite.component').then(
+        (m) => m.AcceptInviteComponent
+      ),
+  },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
