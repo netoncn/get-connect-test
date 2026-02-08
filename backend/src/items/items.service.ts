@@ -101,7 +101,7 @@ export class ItemsService {
       title: item.title,
       notes: item.notes ?? undefined,
       done: item.done,
-      metadata: item.metadata as Record<string, unknown> | undefined,
+      metadata: (item.metadata as Record<string, unknown>) ?? undefined,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
     };

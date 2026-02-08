@@ -13,6 +13,7 @@
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         @if (auth.isAuthenticated()) {
           <a
+            data-testid="home-go-to-lists"
             routerLink="/lists"
             class="px-8 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
           >
@@ -20,12 +21,14 @@
           </a>
         } @else {
           <a
+            data-testid="home-get-started"
             routerLink="/register"
             class="px-8 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
           >
             {{ 'home.getStarted' | translate }}
           </a>
           <a
+            data-testid="home-login"
             routerLink="/login"
             class="px-8 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >

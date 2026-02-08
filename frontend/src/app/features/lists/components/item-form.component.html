@@ -59,6 +59,7 @@
           {{ 'common.cancel' | translate }}
         </button>
         <button
+          data-testid="item-add-btn"
           type="button"
           (click)="onSubmit()"
           [disabled]="loading()"

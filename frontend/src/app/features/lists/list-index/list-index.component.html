@@ -4,6 +4,7 @@
       {{ 'lists.title' | translate }}
     </h1>
     <button
+      data-testid="list-create-btn"
       (click)="showCreateModal.set(true)"
       class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
     >
@@ -22,7 +23,7 @@
       </svg>
     </div>
   } @else if (lists().length === 0) {
-    <div class="text-center py-12">
+    <div data-testid="list-empty-state" class="text-center py-12">
       <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
       </svg>
@@ -34,7 +35,7 @@
       </p>
     </div>
   } @else {
-    <div class="grid gap-4 sm:grid-cols-2">
+    <div data-testid="list-grid" class="grid gap-4 sm:grid-cols-2">
       @for (list of lists(); track list.id) {
         <app-list-card [list]="list" />
       }
@@ -58,6 +59,7 @@
               {{ 'lists.listName' | translate }}
             </label>
             <input
+              data-testid="list-modal-name"
               id="listName"
               type="text"
               formControlName="name"
@@ -69,6 +71,7 @@
 
           <div class="flex justify-end gap-3">
             <button
+              data-testid="list-modal-cancel"
               type="button"
               (click)="closeModal()"
               class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -76,6 +79,7 @@
               {{ 'common.cancel' | translate }}
             </button>
             <button
+              data-testid="list-modal-submit"
               type="submit"
               [disabled]="creating() || createForm.invalid"
               class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
