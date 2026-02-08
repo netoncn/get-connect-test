@@ -1,0 +1,170 @@
+<app-auth-header />
+
+<main class="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+  <!-- Hero Section -->
+  <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+        {{ 'home.title' | translate }}
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+        {{ 'home.subtitle' | translate }}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        @if (auth.isAuthenticated()) {
+          <a
+            routerLink="/lists"
+            class="px-8 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            {{ 'home.goToLists' | translate }}
+          </a>
+        } @else {
+          <a
+            routerLink="/register"
+            class="px-8 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            {{ 'home.getStarted' | translate }}
+          </a>
+          <a
+            routerLink="/login"
+            class="px-8 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-medium rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          >
+            {{ 'auth.login' | translate }}
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-800/50">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+        {{ 'home.features' | translate }}
+      </h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature 1: Shared Lists -->
+        <div class="p-6 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+          <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            {{ 'home.feature1Title' | translate }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            {{ 'home.feature1Desc' | translate }}
+          </p>
+        </div>
+
+        <!-- Feature 2: Roles & Permissions -->
+        <div class="p-6 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+          <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            {{ 'home.feature2Title' | translate }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            {{ 'home.feature2Desc' | translate }}
+          </p>
+        </div>
+
+        <!-- Feature 3: Book Catalog -->
+        <div class="p-6 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            {{ 'home.feature3Title' | translate }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400">
+            {{ 'home.feature3Desc' | translate }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
+        {{ 'home.howItWorks' | translate }}
+      </h2>
+      <div class="space-y-8">
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+            1
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              {{ 'home.step1Title' | translate }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              {{ 'home.step1Desc' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+            2
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              {{ 'home.step2Title' | translate }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              {{ 'home.step2Desc' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div class="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+            3
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              {{ 'home.step3Title' | translate }}
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              {{ 'home.step3Desc' | translate }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-primary-600 dark:bg-primary-700">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-white mb-4">
+        {{ 'home.ctaTitle' | translate }}
+      </h2>
+      <p class="text-primary-100 mb-8">
+        {{ 'home.ctaSubtitle' | translate }}
+      </p>
+      @if (!auth.isAuthenticated()) {
+        <a
+          routerLink="/register"
+          class="inline-block px-8 py-3 bg-white text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors"
+        >
+          {{ 'home.getStarted' | translate }}
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <div class="max-w-6xl mx-auto text-center text-gray-600 dark:text-gray-400">
+      <p>&copy; 2026 GetConnect. {{ 'home.allRightsReserved' | translate }}</p>
+    </div>
+  </footer>
+</main>

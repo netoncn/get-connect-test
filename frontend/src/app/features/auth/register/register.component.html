@@ -1,0 +1,97 @@
+<app-auth-header />
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+  <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">GetConnect</h1>
+      <p class="mt-2 text-gray-600 dark:text-gray-400">{{ 'auth.register' | translate }}</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="mt-8 space-y-6">
+      @if (error()) {
+        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <p class="text-sm text-red-600 dark:text-red-400">{{ error() | translate }}</p>
+        </div>
+      }
+
+      <div class="space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            {{ 'auth.name' | translate }}
+          </label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            autocomplete="name"
+            [placeholder]="'auth.namePlaceholder' | translate"
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-800 dark:text-white"
+            [class.border-red-500]="form.get('name')?.invalid && form.get('name')?.touched"
+          />
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <p class="mt-1 text-sm text-red-500">{{ 'common.required' | translate }}</p>
+          }
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            {{ 'auth.email' | translate }}
+          </label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            [placeholder]="'auth.emailPlaceholder' | translate"
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-800 dark:text-white"
+            [class.border-red-500]="form.get('email')?.invalid && form.get('email')?.touched"
+          />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <p class="mt-1 text-sm text-red-500">{{ 'common.required' | translate }}</p>
+          }
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            {{ 'auth.password' | translate }}
+          </label>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            [placeholder]="'auth.passwordPlaceholder' | translate"
+            class="mt-1 block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-800 dark:text-white"
+            [class.border-red-500]="form.get('password')?.invalid && form.get('password')?.touched"
+          />
+          @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+            <p class="mt-1 text-sm text-red-500">{{ 'common.required' | translate }}</p>
+          } @else if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+            <p class="mt-1 text-sm text-red-500">{{ 'auth.passwordMinLength' | translate }}</p>
+          }
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loading() || form.invalid"
+        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        @if (loading()) {
+          <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        } @else {
+          {{ 'auth.register' | translate }}
+        }
+      </button>
+
+      <p class="text-center text-sm text-gray-600 dark:text-gray-400">
+        {{ 'auth.hasAccount' | translate }}
+        <a routerLink="/login" class="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400">
+          {{ 'auth.login' | translate }}
+        </a>
+      </p>
+    </form>
+  </div>
+</div>
