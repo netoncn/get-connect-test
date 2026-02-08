@@ -62,6 +62,7 @@
           [canEdit]="canEdit()"
           (toggleDone)="onToggleDone($event)"
           (deleteItem)="onDeleteItem($event)"
+          (editItem)="onEditItem($event)"
         />
       </div>
     }
@@ -95,8 +96,17 @@
 <app-invite-modal
   [isOpen]="showInviteModal()"
   [loading]="sendingInvite()"
+  [error]="inviteError()"
   (invite)="onInvite($event)"
-  (close)="showInviteModal.set(false)"
+  (close)="showInviteModal.set(false); inviteError.set(null)"
+/>
+
+<app-edit-item-modal
+  [isOpen]="showEditItemModal()"
+  [item]="editingItem()"
+  [loading]="savingItem()"
+  (save)="onSaveItem($event)"
+  (close)="onCloseEditModal()"
 />
 
 @if (showDeleteConfirm()) {

@@ -15,4 +15,5 @@ export class ItemListComponent {
 
   toggleDone = output<ListItem>();
   deleteItem = output<ListItem>();
+  editItem = output<ListItem>();
 }
