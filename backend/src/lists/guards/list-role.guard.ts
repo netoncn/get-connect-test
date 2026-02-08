@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ListRole } from '@prisma/client';
+import { ListRole, ListMember } from '@prisma/client';
 import { LIST_ROLES_KEY } from '../decorators/list-roles.decorator';
 
 const ROLE_HIERARCHY: Record<ListRole, number> = {
@@ -14,21 +14,25 @@ const ROLE_HIERARCHY: Record<ListRole, number> = {
   [ListRole.VIEWER]: 1,
 };
 
+interface ListRoleRequest {
+  listMembership?: ListMember;
+}
+
 @Injectable()
 export class ListRoleGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<ListRole[]>(LIST_ROLES_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const requiredRoles = this.reflector.getAllAndOverride<ListRole[]>(
+      LIST_ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
 
     if (!requiredRoles || requiredRoles.length === 0) {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<ListRoleRequest>();
     const membership = request.listMembership;
 
     if (!membership) {

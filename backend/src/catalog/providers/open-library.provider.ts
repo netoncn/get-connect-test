@@ -34,7 +34,7 @@ export class OpenLibraryProvider {
         return [];
       }
 
-      const data: OpenLibraryResponse = await response.json();
+      const data = (await response.json()) as OpenLibraryResponse;
 
       return data.docs.map((doc) => this.normalize(doc));
     } catch (error) {

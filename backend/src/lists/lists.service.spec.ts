@@ -101,7 +101,13 @@ describe('ListsService', () => {
     createdAt: now,
     updatedAt: new Date('2026-01-16T12:00:00.000Z'),
     members: [
-      { id: 'member-id-1', listId, userId, role: ListRole.OWNER, createdAt: now },
+      {
+        id: 'member-id-1',
+        listId,
+        userId,
+        role: ListRole.OWNER,
+        createdAt: now,
+      },
     ],
     _count: { items: 3, members: 1 },
   };
@@ -168,7 +174,11 @@ describe('ListsService', () => {
 
       expect(prisma.listMember.findMany).toHaveBeenCalledWith({
         where: { userId },
-        include: { list: { include: { _count: { select: { items: true, members: true } } } } },
+        include: {
+          list: {
+            include: { _count: { select: { items: true, members: true } } },
+          },
+        },
         orderBy: { list: { updatedAt: 'desc' } },
       });
 
@@ -217,7 +227,9 @@ describe('ListsService', () => {
         where: { id: listId },
         include: {
           members: {
-            include: { user: { select: { id: true, name: true, email: true } } },
+            include: {
+              user: { select: { id: true, name: true, email: true } },
+            },
             orderBy: { createdAt: 'asc' },
           },
           _count: { select: { items: true, members: true } },
@@ -270,12 +282,17 @@ describe('ListsService', () => {
     it('should update list name', async () => {
       prisma.list.update.mockResolvedValue(mockUpdatedList);
 
-      const result = await service.update(listId, { name: 'Updated Groceries' });
+      const result = await service.update(listId, {
+        name: 'Updated Groceries',
+      });
 
       expect(prisma.list.update).toHaveBeenCalledWith({
         where: { id: listId },
         data: { name: 'Updated Groceries' },
-        include: { members: true, _count: { select: { items: true, members: true } } },
+        include: {
+          members: true,
+          _count: { select: { items: true, members: true } },
+        },
       });
 
       expect(result).toEqual({

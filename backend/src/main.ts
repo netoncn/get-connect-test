@@ -33,7 +33,9 @@ async function bootstrap() {
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('GetConnect API')
-    .setDescription('Shared lists system with RBAC and book catalog integration')
+    .setDescription(
+      'Shared lists system with RBAC and book catalog integration',
+    )
     .setVersion('1.0')
     .addBearerAuth()
     .build();
@@ -48,4 +50,4 @@ async function bootstrap() {
   logger.log(`Swagger documentation available at http://localhost:${port}/api`);
 }
 
-bootstrap();
+void bootstrap();

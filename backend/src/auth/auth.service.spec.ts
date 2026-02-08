@@ -98,9 +98,9 @@ describe('AuthService', () => {
       await expect(service.register(registerDto)).rejects.toThrow(
         ConflictException,
       );
-      await expect(
-        service.register(registerDto),
-      ).rejects.toThrow('Email already registered');
+      await expect(service.register(registerDto)).rejects.toThrow(
+        'Email already registered',
+      );
       expect(mockPrismaService.user.create).not.toHaveBeenCalled();
     });
 

@@ -93,9 +93,7 @@ describe('AuthController (e2e)', () => {
 
   describe('/auth/login (POST)', () => {
     beforeEach(async () => {
-      await request(app.getHttpServer())
-        .post('/auth/register')
-        .send(testUser);
+      await request(app.getHttpServer()).post('/auth/register').send(testUser);
     });
 
     it('should login with valid credentials', async () => {
@@ -155,9 +153,7 @@ describe('AuthController (e2e)', () => {
     });
 
     it('should fail without token', async () => {
-      await request(app.getHttpServer())
-        .get('/auth/me')
-        .expect(401);
+      await request(app.getHttpServer()).get('/auth/me').expect(401);
     });
 
     it('should fail with invalid token', async () => {

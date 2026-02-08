@@ -55,7 +55,11 @@ describe('InvitesController', () => {
     it('should delegate to invitesService.getMembers with listId', async () => {
       const listId = 'list-1';
       const expected: ListMemberResponseDto[] = [
-        { userId: 'user-1', name: 'Test', role: 'OWNER' } as unknown as ListMemberResponseDto,
+        {
+          userId: 'user-1',
+          name: 'Test',
+          role: 'OWNER',
+        } as unknown as ListMemberResponseDto,
       ];
 
       service.getMembers.mockResolvedValue(expected);
@@ -96,7 +100,10 @@ describe('InvitesController', () => {
     it('should delegate to invitesService.getPendingInvites with listId', async () => {
       const listId = 'list-1';
       const expected: InviteResponseDto[] = [
-        { id: 'invite-1', email: 'pending@example.com' } as unknown as InviteResponseDto,
+        {
+          id: 'invite-1',
+          email: 'pending@example.com',
+        } as unknown as InviteResponseDto,
       ];
 
       service.getPendingInvites.mockResolvedValue(expected);
@@ -146,7 +153,9 @@ describe('InvitesController', () => {
     it('should delegate to invitesService.updateMemberRole with listId, targetUserId, and dto', async () => {
       const listId = 'list-1';
       const targetUserId = 'user-2';
-      const dto: UpdateMemberDto = { role: 'VIEWER' } as unknown as UpdateMemberDto;
+      const dto: UpdateMemberDto = {
+        role: 'VIEWER',
+      } as unknown as UpdateMemberDto;
       const expected: ListMemberResponseDto = {
         userId: 'user-2',
         role: 'VIEWER',
@@ -154,10 +163,18 @@ describe('InvitesController', () => {
 
       service.updateMemberRole.mockResolvedValue(expected);
 
-      const result = await controller.updateMemberRole(listId, targetUserId, dto);
+      const result = await controller.updateMemberRole(
+        listId,
+        targetUserId,
+        dto,
+      );
 
       expect(result).toEqual(expected);
-      expect(service.updateMemberRole).toHaveBeenCalledWith(listId, targetUserId, dto);
+      expect(service.updateMemberRole).toHaveBeenCalledWith(
+        listId,
+        targetUserId,
+        dto,
+      );
       expect(service.updateMemberRole).toHaveBeenCalledTimes(1);
     });
   });

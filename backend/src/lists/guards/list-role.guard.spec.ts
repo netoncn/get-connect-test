@@ -19,7 +19,9 @@ describe('ListRoleGuard', () => {
     jest.clearAllMocks();
   });
 
-  const createMockContext = (request: Record<string, unknown>): ExecutionContext => {
+  const createMockContext = (
+    request: Record<string, unknown>,
+  ): ExecutionContext => {
     return {
       switchToHttp: () => ({
         getRequest: () => request,
@@ -44,7 +46,9 @@ describe('ListRoleGuard', () => {
     const mockRequest = { listMembership: { role: ListRole.OWNER } };
     const mockContext = createMockContext(mockRequest);
 
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([ListRole.EDITOR]);
+    jest
+      .spyOn(reflector, 'getAllAndOverride')
+      .mockReturnValue([ListRole.EDITOR]);
 
     const result = guard.canActivate(mockContext);
 
@@ -55,7 +59,9 @@ describe('ListRoleGuard', () => {
     const mockRequest = { listMembership: { role: ListRole.VIEWER } };
     const mockContext = createMockContext(mockRequest);
 
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([ListRole.EDITOR]);
+    jest
+      .spyOn(reflector, 'getAllAndOverride')
+      .mockReturnValue([ListRole.EDITOR]);
 
     expect(() => guard.canActivate(mockContext)).toThrow(ForbiddenException);
     expect(() => guard.canActivate(mockContext)).toThrow(
@@ -67,17 +73,23 @@ describe('ListRoleGuard', () => {
     const mockRequest = {};
     const mockContext = createMockContext(mockRequest);
 
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([ListRole.VIEWER]);
+    jest
+      .spyOn(reflector, 'getAllAndOverride')
+      .mockReturnValue([ListRole.VIEWER]);
 
     expect(() => guard.canActivate(mockContext)).toThrow(ForbiddenException);
-    expect(() => guard.canActivate(mockContext)).toThrow('List membership not found');
+    expect(() => guard.canActivate(mockContext)).toThrow(
+      'List membership not found',
+    );
   });
 
   it('should return true for exact role match', () => {
     const mockRequest = { listMembership: { role: ListRole.EDITOR } };
     const mockContext = createMockContext(mockRequest);
 
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([ListRole.EDITOR]);
+    jest
+      .spyOn(reflector, 'getAllAndOverride')
+      .mockReturnValue([ListRole.EDITOR]);
 
     const result = guard.canActivate(mockContext);
 

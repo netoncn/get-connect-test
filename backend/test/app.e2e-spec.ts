@@ -36,9 +36,7 @@ describe('App (e2e)', () => {
   });
 
   it('should require authentication for protected routes', async () => {
-    await request(app.getHttpServer())
-      .get('/lists')
-      .expect(401);
+    await request(app.getHttpServer()).get('/lists').expect(401);
   });
 
   it('should allow access to public routes', async () => {

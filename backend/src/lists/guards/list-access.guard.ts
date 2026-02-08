@@ -5,14 +5,22 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
+import { List, ListMember, User } from '@prisma/client';
 import { PrismaService } from '../../prisma';
+
+interface ListAccessRequest {
+  user: User;
+  params: { listId?: string };
+  list?: List & { members: ListMember[] };
+  listMembership?: ListMember;
+}
 
 @Injectable()
 export class ListAccessGuard implements CanActivate {
   constructor(private readonly prisma: PrismaService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<ListAccessRequest>();
     const user = request.user;
     const listId = request.params.listId;
 

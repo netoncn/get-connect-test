@@ -1,5 +1,11 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { CatalogService } from './catalog.service';
 import { SuggestionsResponseDto } from './dto';
 
@@ -13,7 +19,9 @@ export class CatalogController {
   @ApiOperation({ summary: 'Search books and get suggestions' })
   @ApiQuery({ name: 'query', description: 'Search query', required: true })
   @ApiResponse({ status: 200, type: SuggestionsResponseDto })
-  async suggest(@Query('query') query: string): Promise<SuggestionsResponseDto> {
+  async suggest(
+    @Query('query') query: string,
+  ): Promise<SuggestionsResponseDto> {
     return this.catalogService.suggest(query || '');
   }
 }

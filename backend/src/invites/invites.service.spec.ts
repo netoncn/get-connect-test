@@ -404,7 +404,9 @@ describe('InvitesService', () => {
         user: { id: 'user-1', name: 'John Doe', email: 'john@example.com' },
       };
 
-      mockPrismaService.listMember.findUnique.mockResolvedValue(ownerMembership);
+      mockPrismaService.listMember.findUnique.mockResolvedValue(
+        ownerMembership,
+      );
 
       await expect(
         service.updateMemberRole('list-1', 'user-1', { role: 'EDITOR' }),
@@ -446,14 +448,16 @@ describe('InvitesService', () => {
         role: ListRole.OWNER,
       };
 
-      mockPrismaService.listMember.findUnique.mockResolvedValue(ownerMembership);
+      mockPrismaService.listMember.findUnique.mockResolvedValue(
+        ownerMembership,
+      );
 
-      await expect(
-        service.removeMember('list-1', 'user-1'),
-      ).rejects.toThrow(ForbiddenException);
-      await expect(
-        service.removeMember('list-1', 'user-1'),
-      ).rejects.toThrow('Cannot remove the list owner');
+      await expect(service.removeMember('list-1', 'user-1')).rejects.toThrow(
+        ForbiddenException,
+      );
+      await expect(service.removeMember('list-1', 'user-1')).rejects.toThrow(
+        'Cannot remove the list owner',
+      );
       expect(mockPrismaService.listMember.delete).not.toHaveBeenCalled();
     });
   });

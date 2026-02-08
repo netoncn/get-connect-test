@@ -8,7 +8,6 @@ describe('ListsController (e2e)', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let accessToken: string;
-  let userId: string;
 
   const testUser = {
     name: 'Test User',
@@ -45,7 +44,6 @@ describe('ListsController (e2e)', () => {
       .post('/auth/register')
       .send(testUser);
     accessToken = response.body.accessToken;
-    userId = response.body.user.id;
   });
 
   afterAll(async () => {

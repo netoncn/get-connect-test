@@ -122,7 +122,11 @@ describe('ItemsService', () => {
     it('should create an item and return response', async () => {
       mockPrismaService.listItem.create.mockResolvedValue(mockItem);
 
-      const dto = { kind: 'BOOK' as const, title: 'The Great Gatsby', notes: 'Must read this summer' };
+      const dto = {
+        kind: 'BOOK' as const,
+        title: 'The Great Gatsby',
+        notes: 'Must read this summer',
+      };
       const result = await service.create('list-uuid-1', 'user-uuid-1', dto);
 
       expect(mockPrismaService.listItem.create).toHaveBeenCalledWith({
@@ -161,7 +165,11 @@ describe('ItemsService', () => {
       const dto = {
         kind: 'BOOK' as const,
         title: 'The Great Gatsby',
-        metadata: { source: 'google', authors: ['F. Scott Fitzgerald'], isbn: '123' },
+        metadata: {
+          source: 'google',
+          authors: ['F. Scott Fitzgerald'],
+          isbn: '123',
+        },
       };
       const result = await service.create('list-uuid-1', 'user-uuid-1', dto);
 
@@ -172,7 +180,11 @@ describe('ItemsService', () => {
           kind: 'BOOK',
           title: 'The Great Gatsby',
           notes: undefined,
-          metadata: { source: 'google', authors: ['F. Scott Fitzgerald'], isbn: '123' },
+          metadata: {
+            source: 'google',
+            authors: ['F. Scott Fitzgerald'],
+            isbn: '123',
+          },
         },
         include: {
           createdBy: {

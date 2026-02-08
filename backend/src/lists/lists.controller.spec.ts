@@ -2,7 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ListsController } from './lists.controller';
 import { ListsService } from './lists.service';
 import type { User } from '@prisma/client';
-import { CreateListDto, UpdateListDto, ListResponseDto, ListDetailResponseDto } from './dto';
+import {
+  CreateListDto,
+  UpdateListDto,
+  ListResponseDto,
+  ListDetailResponseDto,
+} from './dto';
 import { ListAccessGuard } from './guards/list-access.guard';
 import { ListRoleGuard } from './guards/list-role.guard';
 

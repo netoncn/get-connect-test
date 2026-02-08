@@ -25,10 +25,14 @@ describe('OpenLibraryProvider', () => {
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
       const calledUrl = new URL((global.fetch as jest.Mock).mock.calls[0][0]);
-      expect(calledUrl.origin + calledUrl.pathname).toBe('https://openlibrary.org/search.json');
+      expect(calledUrl.origin + calledUrl.pathname).toBe(
+        'https://openlibrary.org/search.json',
+      );
       expect(calledUrl.searchParams.get('q')).toBe('clean code');
       expect(calledUrl.searchParams.get('limit')).toBe('5');
-      expect(calledUrl.searchParams.get('fields')).toBe('key,title,author_name,cover_i,isbn');
+      expect(calledUrl.searchParams.get('fields')).toBe(
+        'key,title,author_name,cover_i,isbn',
+      );
     });
 
     it('should return normalized suggestions', async () => {
@@ -103,7 +107,9 @@ describe('OpenLibraryProvider', () => {
       expect(suggestion.source).toBe('OPEN_LIBRARY');
       expect(suggestion.sourceId).toBe('/works/OL12345');
       expect(suggestion.authors).toEqual(['Robert C. Martin', 'Uncle Bob']);
-      expect(suggestion.coverUrl).toBe('https://covers.openlibrary.org/b/id/8091016-M.jpg');
+      expect(suggestion.coverUrl).toBe(
+        'https://covers.openlibrary.org/b/id/8091016-M.jpg',
+      );
       expect(suggestion.isbn).toBe('9780132350884');
     });
   });

@@ -1,4 +1,8 @@
-import { ExecutionContext, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ListAccessGuard } from './list-access.guard';
 import { PrismaService } from '../../prisma';
@@ -27,7 +31,9 @@ describe('ListAccessGuard', () => {
     jest.clearAllMocks();
   });
 
-  const createMockContext = (request: Record<string, unknown>): ExecutionContext => {
+  const createMockContext = (
+    request: Record<string, unknown>,
+  ): ExecutionContext => {
     return {
       switchToHttp: () => ({
         getRequest: () => request,
@@ -46,13 +52,20 @@ describe('ListAccessGuard', () => {
   });
 
   it('should throw NotFoundException when list not found', async () => {
-    const mockRequest = { user: { id: 'user-1' }, params: { listId: 'list-1' } };
+    const mockRequest = {
+      user: { id: 'user-1' },
+      params: { listId: 'list-1' },
+    };
     const mockContext = createMockContext(mockRequest);
 
     prisma.list.findUnique.mockResolvedValue(null);
 
-    await expect(guard.canActivate(mockContext)).rejects.toThrow(NotFoundException);
-    await expect(guard.canActivate(mockContext)).rejects.toThrow('List not found');
+    await expect(guard.canActivate(mockContext)).rejects.toThrow(
+      NotFoundException,
+    );
+    await expect(guard.canActivate(mockContext)).rejects.toThrow(
+      'List not found',
+    );
 
     expect(prisma.list.findUnique).toHaveBeenCalledWith({
       where: { id: 'list-1' },
@@ -61,7 +74,10 @@ describe('ListAccessGuard', () => {
   });
 
   it('should throw ForbiddenException when user is not a member', async () => {
-    const mockRequest = { user: { id: 'user-1' }, params: { listId: 'list-1' } };
+    const mockRequest = {
+      user: { id: 'user-1' },
+      params: { listId: 'list-1' },
+    };
     const mockContext = createMockContext(mockRequest);
 
     prisma.list.findUnique.mockResolvedValue({
@@ -70,7 +86,9 @@ describe('ListAccessGuard', () => {
       members: [],
     });
 
-    await expect(guard.canActivate(mockContext)).rejects.toThrow(ForbiddenException);
+    await expect(guard.canActivate(mockContext)).rejects.toThrow(
+      ForbiddenException,
+    );
     await expect(guard.canActivate(mockContext)).rejects.toThrow(
       'You are not a member of this list',
     );

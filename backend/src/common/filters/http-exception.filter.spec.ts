@@ -30,7 +30,10 @@ describe('AllExceptionsFilter', () => {
   });
 
   it('should format HttpException with correct status and message', () => {
-    const exception = new HttpException('Forbidden resource', HttpStatus.FORBIDDEN);
+    const exception = new HttpException(
+      'Forbidden resource',
+      HttpStatus.FORBIDDEN,
+    );
 
     filter.catch(exception, mockHost);
 
@@ -44,7 +47,10 @@ describe('AllExceptionsFilter', () => {
   });
 
   it("should handle validation errors (array message) as 'Validation failed'", () => {
-    const exception = new BadRequestException(['name must not be empty', 'email must be valid']);
+    const exception = new BadRequestException([
+      'name must not be empty',
+      'email must be valid',
+    ]);
 
     filter.catch(exception, mockHost);
 

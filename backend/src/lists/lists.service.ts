@@ -73,7 +73,10 @@ export class ListsService {
     }));
   }
 
-  async findOne(listId: string, userId: string): Promise<ListDetailResponseDto> {
+  async findOne(
+    listId: string,
+    userId: string,
+  ): Promise<ListDetailResponseDto> {
     const list = await this.prisma.list.findUnique({
       where: { id: listId },
       include: {

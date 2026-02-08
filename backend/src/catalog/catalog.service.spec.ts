@@ -15,15 +15,28 @@ describe('CatalogService', () => {
   describe('suggest', () => {
     it('should return OTHER + book suggestions', async () => {
       const bookSuggestions: SuggestionDto[] = [
-        { kind: ItemKind.BOOK, title: 'Clean Code', source: 'OPEN_LIBRARY', sourceId: '/works/OL1' },
-        { kind: ItemKind.BOOK, title: 'Clean Architecture', source: 'OPEN_LIBRARY', sourceId: '/works/OL2' },
+        {
+          kind: ItemKind.BOOK,
+          title: 'Clean Code',
+          source: 'OPEN_LIBRARY',
+          sourceId: '/works/OL1',
+        },
+        {
+          kind: ItemKind.BOOK,
+          title: 'Clean Architecture',
+          source: 'OPEN_LIBRARY',
+          sourceId: '/works/OL2',
+        },
       ];
       openLibrary.search.mockResolvedValue(bookSuggestions);
 
       const result = await service.suggest('Clean');
 
       expect(result.suggestions).toHaveLength(3);
-      expect(result.suggestions[0]).toEqual({ kind: ItemKind.OTHER, title: 'Clean' });
+      expect(result.suggestions[0]).toEqual({
+        kind: ItemKind.OTHER,
+        title: 'Clean',
+      });
       expect(result.suggestions[1]).toEqual(bookSuggestions[0]);
       expect(result.suggestions[2]).toEqual(bookSuggestions[1]);
     });
@@ -48,7 +61,10 @@ describe('CatalogService', () => {
       const result = await service.suggest('  hello world  ');
 
       expect(openLibrary.search).toHaveBeenCalledWith('hello world');
-      expect(result.suggestions[0]).toEqual({ kind: ItemKind.OTHER, title: 'hello world' });
+      expect(result.suggestions[0]).toEqual({
+        kind: ItemKind.OTHER,
+        title: 'hello world',
+      });
     });
   });
 });

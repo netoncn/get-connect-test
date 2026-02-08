@@ -80,7 +80,9 @@ export class InvitesService {
     });
 
     if (existingInvite) {
-      throw new ConflictException('An active invite already exists for this email');
+      throw new ConflictException(
+        'An active invite already exists for this email',
+      );
     }
 
     const expiresAt = new Date();
@@ -108,7 +110,10 @@ export class InvitesService {
     };
   }
 
-  async acceptInvite(token: string, userId: string): Promise<AcceptInviteResponseDto> {
+  async acceptInvite(
+    token: string,
+    userId: string,
+  ): Promise<AcceptInviteResponseDto> {
     const invite = await this.prisma.listInvite.findUnique({
       where: { token },
       include: { list: true },
@@ -131,7 +136,9 @@ export class InvitesService {
     });
 
     if (!user || user.email.toLowerCase() !== invite.email.toLowerCase()) {
-      throw new ForbiddenException('This invite is for a different email address');
+      throw new ForbiddenException(
+        'This invite is for a different email address',
+      );
     }
 
     const existingMembership = await this.prisma.listMember.findUnique({

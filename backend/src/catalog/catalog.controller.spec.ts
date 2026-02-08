@@ -31,7 +31,7 @@ describe('CatalogController', () => {
       const expected: SuggestionsResponseDto = {
         suggestions: [
           {
-            title: 'Harry Potter and the Philosopher\'s Stone',
+            title: "Harry Potter and the Philosopher's Stone",
             author: 'J.K. Rowling',
           },
         ],

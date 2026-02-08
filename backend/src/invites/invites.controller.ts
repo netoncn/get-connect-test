@@ -43,7 +43,9 @@ export class InvitesController {
   @ApiOperation({ summary: 'Get list members' })
   @ApiParam({ name: 'listId', description: 'List ID' })
   @ApiResponse({ status: 200, type: [ListMemberResponseDto] })
-  async getMembers(@Param('listId') listId: string): Promise<ListMemberResponseDto[]> {
+  async getMembers(
+    @Param('listId') listId: string,
+  ): Promise<ListMemberResponseDto[]> {
     return this.invitesService.getMembers(listId);
   }
 
@@ -53,7 +55,10 @@ export class InvitesController {
   @ApiOperation({ summary: 'Create invite (owner only)' })
   @ApiParam({ name: 'listId', description: 'List ID' })
   @ApiResponse({ status: 201, type: InviteResponseDto })
-  @ApiResponse({ status: 409, description: 'User already member or invite exists' })
+  @ApiResponse({
+    status: 409,
+    description: 'User already member or invite exists',
+  })
   async createInvite(
     @Param('listId') listId: string,
     @CurrentUser() user: User,
@@ -68,7 +73,9 @@ export class InvitesController {
   @ApiOperation({ summary: 'Get pending invites (owner only)' })
   @ApiParam({ name: 'listId', description: 'List ID' })
   @ApiResponse({ status: 200, type: [InviteResponseDto] })
-  async getPendingInvites(@Param('listId') listId: string): Promise<InviteResponseDto[]> {
+  async getPendingInvites(
+    @Param('listId') listId: string,
+  ): Promise<InviteResponseDto[]> {
     return this.invitesService.getPendingInvites(listId);
   }
 
@@ -91,7 +98,10 @@ export class InvitesController {
   @ApiOperation({ summary: 'Accept invite' })
   @ApiParam({ name: 'token', description: 'Invite token' })
   @ApiResponse({ status: 201, type: AcceptInviteResponseDto })
-  @ApiResponse({ status: 400, description: 'Invite expired or already accepted' })
+  @ApiResponse({
+    status: 400,
+    description: 'Invite expired or already accepted',
+  })
   @ApiResponse({ status: 403, description: 'Email mismatch' })
   async acceptInvite(
     @Param('token') token: string,

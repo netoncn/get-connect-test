@@ -20,7 +20,12 @@ import {
 import { ListRole } from '@prisma/client';
 import type { User } from '@prisma/client';
 import { ListsService } from './lists.service';
-import { CreateListDto, UpdateListDto, ListResponseDto, ListDetailResponseDto } from './dto';
+import {
+  CreateListDto,
+  UpdateListDto,
+  ListResponseDto,
+  ListDetailResponseDto,
+} from './dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ListAccessGuard } from './guards/list-access.guard';
 import { ListRoleGuard } from './guards/list-role.guard';
@@ -34,7 +39,11 @@ export class ListsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new list' })
-  @ApiResponse({ status: 201, description: 'List created', type: ListResponseDto })
+  @ApiResponse({
+    status: 201,
+    description: 'List created',
+    type: ListResponseDto,
+  })
   async create(
     @CurrentUser() user: User,
     @Body() dto: CreateListDto,
@@ -44,7 +53,11 @@ export class ListsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all lists for current user' })
-  @ApiResponse({ status: 200, description: 'List of user lists', type: [ListResponseDto] })
+  @ApiResponse({
+    status: 200,
+    description: 'List of user lists',
+    type: [ListResponseDto],
+  })
   async findAll(@CurrentUser() user: User): Promise<ListResponseDto[]> {
     return this.listsService.findAll(user.id);
   }
@@ -53,7 +66,11 @@ export class ListsController {
   @UseGuards(ListAccessGuard)
   @ApiOperation({ summary: 'Get list details' })
   @ApiParam({ name: 'listId', description: 'List ID' })
-  @ApiResponse({ status: 200, description: 'List details', type: ListDetailResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'List details',
+    type: ListDetailResponseDto,
+  })
   @ApiResponse({ status: 404, description: 'List not found' })
   async findOne(
     @Param('listId') listId: string,
@@ -67,7 +84,11 @@ export class ListsController {
   @ListRoles(ListRole.OWNER, ListRole.EDITOR)
   @ApiOperation({ summary: 'Update list' })
   @ApiParam({ name: 'listId', description: 'List ID' })
-  @ApiResponse({ status: 200, description: 'List updated', type: ListResponseDto })
+  @ApiResponse({
+    status: 200,
+    description: 'List updated',
+    type: ListResponseDto,
+  })
   @ApiResponse({ status: 403, description: 'Insufficient permissions' })
   @ApiResponse({ status: 404, description: 'List not found' })
   async update(
