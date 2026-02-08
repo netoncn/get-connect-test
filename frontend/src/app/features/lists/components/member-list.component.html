@@ -1,0 +1,54 @@
+<div class="space-y-4">
+  @for (member of members(); track member.id) {
+    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+          <span class="text-primary-600 dark:text-primary-400 font-medium">
+            {{ member.userName.charAt(0).toUpperCase() }}
+          </span>
+        </div>
+        <div>
+          <p class="font-medium text-gray-900 dark:text-white">{{ member.userName }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ member.userEmail }}</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        @if (member.role === 'OWNER') {
+          <span class="px-3 py-1 bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 rounded-full text-sm font-medium">
+            {{ 'members.owner' | translate }}
+          </span>
+        } @else if (isOwner()) {
+          <select
+            [ngModel]="member.role"
+            (ngModelChange)="onRoleChange(member, $event)"
+            class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-primary-500"
+          >
+            <option value="EDITOR">{{ 'members.editor' | translate }}</option>
+            <option value="VIEWER">{{ 'members.viewer' | translate }}</option>
+          </select>
+
+          <button
+            (click)="onRemove(member)"
+            class="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            [title]="'members.removeMember' | translate"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        } @else {
+          <span class="px-3 py-1 bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300 rounded-full text-sm font-medium">
+            {{ member.role === 'EDITOR' ? ('members.editor' | translate) : ('members.viewer' | translate) }}
+          </span>
+        }
+      </div>
+    </div>
+  }
+
+  @if (members().length === 0) {
+    <p class="text-center text-gray-500 dark:text-gray-400 py-8">
+      {{ 'members.noMembers' | translate }}
+    </p>
+  }
+</div>

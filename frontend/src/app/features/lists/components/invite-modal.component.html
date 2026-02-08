@@ -1,0 +1,69 @@
+@if (isOpen()) {
+  <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+      <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75 transition-opacity" (click)="onClose()"></div>
+
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl transform transition-all sm:max-w-lg w-full p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          {{ 'members.inviteMember' | translate }}
+        </h3>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="space-y-4">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                {{ 'members.email' | translate }}
+              </label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                [placeholder]="'members.emailPlaceholder' | translate"
+                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+                [class.border-red-500]="form.get('email')?.invalid && form.get('email')?.touched"
+              />
+            </div>
+
+            <div>
+              <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                {{ 'members.role' | translate }}
+              </label>
+              <select
+                id="role"
+                formControlName="role"
+                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="VIEWER">{{ 'members.viewer' | translate }}</option>
+                <option value="EDITOR">{{ 'members.editor' | translate }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3 mt-6">
+            <button
+              type="button"
+              (click)="onClose()"
+              class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            >
+              {{ 'common.cancel' | translate }}
+            </button>
+            <button
+              type="submit"
+              [disabled]="loading() || form.invalid"
+              class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+            >
+              @if (loading()) {
+                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              } @else {
+                {{ 'members.inviteMember' | translate }}
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

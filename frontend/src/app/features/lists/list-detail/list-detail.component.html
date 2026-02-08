@@ -1,0 +1,127 @@
+<div class="max-w-4xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <a routerLink="/lists" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+      <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    @if (list()) {
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white flex-1">{{ list()!.name }}</h1>
+      @if (isOwner()) {
+        <button
+          (click)="showDeleteConfirm.set(true)"
+          class="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      }
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="flex items-center justify-center py-12">
+      <svg class="animate-spin h-8 w-8 text-primary-600" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+    </div>
+  } @else if (list()) {
+    <div class="flex gap-2 mb-6 border-b border-gray-200 dark:border-gray-700">
+      <button
+        (click)="activeTab.set('items')"
+        class="px-4 py-2 text-sm font-medium transition-colors"
+        [class]="activeTab() === 'items' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+      >
+        {{ 'items.title' | translate }} ({{ items().length }})
+      </button>
+      <button
+        (click)="activeTab.set('members')"
+        class="px-4 py-2 text-sm font-medium transition-colors"
+        [class]="activeTab() === 'members' ? 'text-primary-600 border-b-2 border-primary-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400'"
+      >
+        {{ 'members.title' | translate }} ({{ list()!.members.length }})
+      </button>
+    </div>
+
+    @if (activeTab() === 'items') {
+      <div class="space-y-6">
+        @if (canEdit()) {
+          <app-item-form
+            [loading]="addingItem()"
+            (addItem)="onAddItem($event)"
+          />
+        }
+
+        <app-item-list
+          [items]="items()"
+          [canEdit]="canEdit()"
+          (toggleDone)="onToggleDone($event)"
+          (deleteItem)="onDeleteItem($event)"
+        />
+      </div>
+    }
+
+    @if (activeTab() === 'members') {
+      <div class="space-y-6">
+        @if (isOwner()) {
+          <button
+            (click)="showInviteModal.set(true)"
+            class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+            {{ 'members.inviteMember' | translate }}
+          </button>
+        }
+
+        <app-member-list
+          [members]="list()!.members"
+          [isOwner]="isOwner()"
+          (roleChange)="onRoleChange($event)"
+          (removeMember)="onRemoveMember($event)"
+        />
+      </div>
+    }
+  }
+</div>
+
+<app-invite-modal
+  [isOpen]="showInviteModal()"
+  [loading]="sendingInvite()"
+  (invite)="onInvite($event)"
+  (close)="showInviteModal.set(false)"
+/>
+
+@if (showDeleteConfirm()) {
+  <div class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/75" (click)="showDeleteConfirm.set(false)"></div>
+      <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 max-w-md w-full">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          {{ 'lists.deleteList' | translate }}
+        </h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-6">
+          {{ 'lists.deleteConfirm' | translate }}
+        </p>
+        <div class="flex justify-end gap-3">
+          <button
+            (click)="showDeleteConfirm.set(false)"
+            class="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+          <button
+            (click)="onDeleteList()"
+            [disabled]="deletingList()"
+            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+          >
+            {{ 'common.delete' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
